@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Juli ✨</title>
+    <style>
+        :root {
+            --azul-pastel: #B2D8E5;
+            --rosa-pastel: #F4C2C2;
+            --celeste: #87CEEB;
+            --rojo-pastel: #FFB3B3;
+            --amarillo-woodstock: #FDE45B;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fdfdfd;
+            font-family: 'Arial Rounded MT Bold', sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Sobre */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: var(--azul-pastel);
+            border: 3px solid #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .envelope:before {
+            content: "";
+            position: absolute;
+            z-index: 4;
+            border-top: 110px solid #a3cfdf;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            top: 0;
+            transform-origin: top;
+            transition: all 0.6s ease;
+        }
+
+        .abreme-tag {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+            background: white;
+            padding: 8px 20px;
+            border: 3px solid #000;
+            border-radius: 30px;
+            font-weight: bold;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        /* Carta */
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 300px;
+            height: 200px;
+            background: white;
+            border: 2px solid #000;
+            z-index: 2;
+            transition: all 0.8s ease;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            overflow-y: auto;
+        }
+
+        .letter p {
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #333;
+            margin: 0;
+        }
+
+        /* Animación Abierta */
+        .open .envelope:before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .open .letter {
+            transform: translateY(-170px);
+            z-index: 5;
+            height: 340px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .open .abreme-tag { display: none; }
+
+        /* Globos Dinámicos */
+        .balloon {
+            position: absolute;
+            width: 45px;
+            height: 60px;
+            border-radius: 50%;
+            bottom: -100px;
+            z-index: 100;
+        }
+
+        .msg-balloon {
+            position: absolute;
+            width: 75px;
+            height: 95px;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 200;
+            color: white;
+            font-size: 28px;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .balloon-16 {
+            position: absolute;
+            width: 85px;
+            height: 105px;
+            background: var(--amarillo-woodstock);
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            font-weight: bold;
+            color: #333;
+            border: 3px solid #000;
+            z-index: 150;
+            top: 40px;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        @keyframes floatRandom {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(5px, -15px) rotate(5deg); }
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-110vh); opacity: 0; }
+        }
+
+        .snoopy-decor {
+            width: 85px;
+            position: absolute;
+            bottom: -15px;
+            right: -20px;
+            z-index: 12;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- El archivo debe llamarse musica.mp3 en GitHub -->
+    <audio id="musicaLaufey" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="envelope-wrapper" id="sobre" onclick="abrirSorpresa()">
+        <div class="abreme-tag">ÁBREME 🐾</div>
+        <div class="envelope">
+            <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png" class="snoopy-decor">
+            <div class="letter">
+                <p id="texto-carta"></p>
+                <p id="firma" style="margin-top:15px; font-weight:bold; opacity:0;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Globos Interactivos -->
+    <div id="globo16" class="balloon-16">16</div>
+    <div id="gRojo" class="msg-balloon" style="background: var(--rojo-pastel); left: 10%; top: 22%;">🎈</div>
+    <div id="gAzul" class="msg-balloon" style="background: var(--celeste); left: 42%; top: 18%;">🎈</div>
+    <div id="gRosa" class="msg-balloon" style="background: #FFB6C1; left: 74%; top: 28%;">🎈</div>
+
+    <script>
+        function abrirSorpresa() {
+            const sobre = document.getElementById('sobre');
+            const musica = document.getElementById('musicaLaufey');
+            
+            if(!sobre.classList.contains('open')) {
+                sobre.classList.add('open');
+                
+                // Activar música de Laufey
+                musica.play().catch(() => {
+                    alert("¡Toca una vez más para escuchar a Laufey! 🎶");
+                    document.body.onclick = () => { musica.play(); document.body.onclick = null; };
+                });
+
+                // Escribir Mensaje
+                const texto = "Amiga un muuuuy feliz cumpleaños, te quiero desear un feliz dia y unos muuy felices 16 añitos, espero que te la estes pasando muuy bienn, pasandolo con tus seres queridos. Quiero agradecerte por la confianza y por esos momentos en los que una charla contigo nos cambia el animoo, admiro mucho tu forma de ser y esa amabilidad que tienes con todos<3 Te quiero mucho mi Julii, un super abrazooo.";
+                let i = 0;
+                function escribir() {
+                    if (i < texto.length) {
+                        document.getElementById("texto-carta").innerHTML += texto.charAt(i);
+                        i++;
+                        setTimeout(escribir, 45);
+                    } else {
+                        const firma = document.getElementById("firma");
+                        firma.style.opacity = "1";
+                        firma.innerText = "De tu amiguito Joel";
+                    }
+                }
+                setTimeout(escribir, 1000);
+
+                // Lluvia inicial de globos
+                for(let j=0; j<30; j++) {
+                    setTimeout(crearGloboLluvia, j * 100);
+                }
+
+                // Mostrar globos fijos
+                setTimeout(() => {
+                    const g16 = document.getElementById('globo16');
+                    g16.style.display = 'flex';
+                    g16.style.left = 'calc(50% - 42px)';
+                    g16.style.animation = 'floatRandom 3.5s infinite ease-in-out';
+
+                    configurarGlobo('gRojo', "Muchaaas felicidades por tu dia mi Juliiii. No todos los dias se encuentra a una amiga tan amable como tu, y por eso me alegra mucho tenerte en mi vida<3");
+                    configurarGlobo('gAzul', "Hice este pequeño regalo para ti, espero te guste, es poquito pero con muuuchooo cariñooooo");
+                    configurarGlobo('gRosa', "Te quieroooooo muuuuuchooo mi Juliiii<333");
+                }, 1800);
+            }
+        }
+
+        function crearGloboLluvia() {
+            const b = document.createElement('div');
+            b.className = 'balloon';
+            b.style.left = Math.random() * 100 + "vw";
+            b.style.background = `hsl(${Math.random() * 360}, 75%, 85%)`;
+            b.style.animation = `floatUp ${Math.random() * 2 + 4}s linear forwards`;
+            document.body.appendChild(b);
+        }
+
+        function configurarGlobo(id, msj) {
+            const el = document.getElementById(id);
+            el.style.display = 'flex';
+            el.style.animation = `floatRandom ${Math.random() * 2 + 3}s infinite ease-in-out`;
+            el.onclick = (e) => {
+                e.stopPropagation();
+                el.style.transform = 'scale(1.8)';
+                el.style.opacity = '0';
+                setTimeout(() => {
+                    alert(msj);
+                    el.style.display = 'none';
+                }, 250);
+            };
+        }
+    </script>
+</body>
+</html>
