@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Juli ✨</title>
+    <style>
+        :root {
+            --hazel-base: #8A9A86;
+            --hazel-dark: #4A5548;
+            --hazel-gold: #D4B996;
+            --dorado-miel: #C5A059;
+            --verde-oliva: #556B2F;
+            --crema-suave: #FAF7F0;
+            --rosa-contraste: #F2C6C2;
+            --azul-mar: #B2D8E5;
+            --texto: #3E4A3D;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            /* Fondo Hazel ambientado en fiesta tranquila */
+            background: linear-gradient(135deg, #9BAF97 0%, #8A9A86 100%);
+            font-family: 'Arial Rounded MT Bold', -apple-system, sans-serif;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Decoración estética de Fiesta Tranquila (Luces de fondo) */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-image: 
+                radial-gradient(circle, rgba(255,253,249,0.15) 10%, transparent 11%),
+                radial-gradient(circle, rgba(212,185,150,0.2) 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Contenedor de Pantallas */
+        .pantalla {
+            position: absolute;
+            width: 90%;
+            max-width: 360px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255, 253, 249, 0.96);
+            padding: 25px 20px;
+            border-radius: 24px;
+            border: 3px solid var(--hazel-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(5px);
+        }
+
+        .pantalla.activa {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        h2 { color: var(--texto); font-size: 19px; margin-bottom: 15px; line-height: 1.4; }
+        .titulo-bonito { font-family: 'Georgia', serif; font-style: italic; font-weight: bold; }
+
+        .btn-generico {
+            background-color: var(--hazel-base);
+            color: white;
+            border: 3px solid var(--hazel-dark);
+            padding: 12px 24px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px var(--hazel-dark);
+            transition: all 0.1s;
+            margin: 8px;
+            width: 80%;
+        }
+
+        .btn-generico:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--hazel-dark);
+        }
+
+        /* --- PANTALLA 1: EL SOBRE --- */
+        #p-sobre { background: transparent; border: none; box-shadow: none; padding: 0; backdrop-filter: none; }
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: var(--azul-mar);
+            border: 3px solid #000;
+            border-radius: 4px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        .envelope:before {
+            content: ""; position: absolute; z-index: 4;
+            border-top: 110px solid #a3cfdf;
+            border-left: 160px solid transparent; border-right: 160px solid transparent;
+            top: 0; transform-origin: top;
+        }
+        .abreme-tag {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 5;
+            background: white; padding: 10px 20px; border: 3px solid #000; border-radius: 30px;
+            font-weight: bold; font-size: 13px; box-shadow: 3px 3px 0px #000; color: #333;
+        }
+        .snoopy-decor { width: 85px; position: absolute; bottom: -12px; right: -15px; z-index: 6; }
+
+        /* --- PANTALLA 3: PASTEL --- */
+        .box-pastel { font-size: 70px; margin: 15px 0; cursor: pointer; animation: bounce 2s infinite; }
+
+        /* --- PANTALLA 4: PELUCHE BLESSD --- */
+        .peluche-blessd {
+            width: 150px;
+            height: 150px;
+            background: #e0f2fe;
+            border-radius: 50%;
+            border: 4px dashed var(--hazel-gold);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 75px;
+            margin: 15px 0;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        /* --- PANTALLA NUEVA: ÁLBUM DE FOTOS --- */
+        .grid-fotos {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-height: 52vh;
+            overflow-y: auto;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+        .marco-foto {
+            background: white;
+            padding: 6px;
+            border: 2px solid var(--hazel-dark);
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.1);
+            transform: rotate(calc(Math.random() * 6deg - 3deg));
+            transition: transform 0.2s;
+        }
+        .marco-foto img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 4px;
+            background-color: #eee; /* Color base mientras carga */
+        }
+
+        /* --- PANTALLA 5: LA GRAN CARTA --- */
+        #p-carta { max-height: 85vh; width: 92%; }
+        .carta-header {
+            background-color: var(--hazel-base);
+            width: calc(100% + 40px);
+            margin: -25px -20px 15px -20px;
+            padding: 12px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            color: white;
+            font-weight: bold;
+            border-bottom: 3px solid var(--hazel-dark);
+        }
+        .texto-carta-scroll { overflow-y: auto; width: 100%; max-height: 48vh; text-align: justify; }
+        #texto-tipeado { color: #333; font-size: 14px; line-height: 1.6; margin: 0; }
+        #firma-final { margin-top: 15px; font-weight: bold; font-size: 16px; color: var(--verde-oliva); text-align: center; opacity: 0; transition: opacity 0.5s; }
+
+        /* Globos Interactivos Finales */
+        #capa-globos { position: absolute; width: 100vw; height: 100vh; top: 0; left: 0; pointer-events: none; display: none; z-index: 100; }
+        .balloon-rain { position: absolute; width: 35px; height: 48px; border-radius: 50%; bottom: -60px; opacity: 0.7; animation: floatUp 4s linear forwards; }
+        .balloon-interactivo {
+            position: absolute; border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            cursor: pointer; pointer-events: auto; box-shadow: inset -5px -5px 15px rgba(0,0,0,0.15);
+            border: 2px solid rgba(255,255,255,0.4); animation: floatRandom 4s infinite ease-in-out;
+        }
+        #glob-16 { width: 90px; height: 110px; background: var(--hazel-gold); font-size: 42px; font-weight: bold; color: white; border: 3px solid var(--hazel-dark); left: calc(50% - 45px); top: 8%; }
+        #glob-r { width: 75px; height: 95px; background: var(--rosa-contraste); left: 8%; top: 28%; font-size: 28px; border: 2px solid var(--hazel-dark); }
+        #glob-a { width: 75px; height: 95px; background: var(--azul-mar); left: 40%; top: 42%; font-size: 28px; border: 2px solid var(--hazel-dark); }
+        #glob-p { width: 75px; height: 95px; background: #E6C5E8; left: 72%; top: 25%; font-size: 28px; border: 2px solid var(--hazel-dark); }
+
+        .pop-mensaje {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8);
+            background: white; border: 3px solid var(--hazel-base); border-radius: 20px; padding: 25px 20px;
+            width: 85%; max-width: 300px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            z-index: 2000; display: none; opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .pop-mensaje.active { display: block; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        .pop-mensaje button { background: var(--hazel-base); color: white; border: none; padding: 8px 20px; border-radius: 15px; font-weight: bold; margin-top: 10px; cursor: pointer; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes floatUp { 0% { transform: translateY(0); } 100% { transform: translateY(-125vh); } }
+        @keyframes floatRandom { 0%, 100% { transform: translate(0, 0) rotate(0deg); } 50% { transform: translate(6px, -12px) rotate(4deg); } }
+    </style>
+</head>
+<body>
+
+    <audio id="musicaFondo" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="p-sobre" class="pantalla activa">
+        <div class="envelope" onclick="navegar('p-sobre', 'p-pregunta', true)">
+            <div class="abreme-tag">ÁBREME 🐾<br><span style="font-size:10px; font-weight:normal;">De tu amiguito Joel</span></div>
+            <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png" class="snoopy-decor">
+        </div>
+    </div>
+
+    <div id="p-pregunta" class="pantalla">
+        <h2>Tengo una sorpresa para ti,<br>¿la quieres ver? 👀🌻</h2>
+        <button class="btn-generico" onclick="navegar('p-pregunta', 'p-pastel')">¡Sí! ✨</button>
+        <button class="btn-generico" onclick="navegar('p-pregunta', 'p-pastel')">Obvio que sí 🐻💙</button>
+    </div>
+
+    <div id="p-pastel" class="pantalla">
+        <h2>¡Un pastel sorpresa para celebrar tus 16! 🎂</h2>
+        <p>Haz clic en el pastel para soplar las velitas y ver qué hay dentro...</p>
+        <div class="box-pastel" onclick="navegar('p-pastel', 'p-peluche')">🎂✨</div>
+    </div>
+
+    <div id="p-peluche" class="pantalla">
+        <h2>¡Sorpresa! Tu regalo virtual: 🧸✨</h2>
+        <p>Un peluche exclusivo inspirado en Blessd hecho con mucho cariño.</p>
+        <div class="peluche-blessd" onclick="navegar('p-peluche', 'p-album')">🧸</div>
+        <p style="font-size:11px; color: #777; margin-top:10px;">(Toca el peluche para continuar)</p>
+    </div>
+
+    <div id="p-album" class="pantalla">
+        <h2 class="titulo-bonito" style="color: var(--verde-oliva); margin-top: 5px;">Nuestros recuerdos</h2>
+        <div class="grid-fotos">
+            <div class="marco-foto"><img src="foto1.jpg" alt="Recuerdo 1"></div>
+            <div class="marco-foto"><img src="foto2.jpg" alt="Recuerdo 2"></div>
+            <div class="marco-foto"><img src="foto3.jpg" alt="Recuerdo 3"></div>
+            <div class="marco-foto"><img src="foto4.jpg" alt="Recuerdo 4"></div>
+            <div class="marco-foto"><img src="foto5.jpg" alt="Recuerdo 5"></div>
+            <div class="marco-foto"><img src="foto6.jpg" alt="Recuerdo 6"></div>
+        </div>
+        <button class="btn-generico" style="background-color: var(--dorado-miel);" onclick="navegar('p-album', 'p-carta')">Leer mi cartita 💌</button>
+    </div>
+
+    <div id="p-carta" class="pantalla">
+        <div class="carta-header">🐾 Una cartita para Juli 🐾</div>
+        <div class="texto-carta-scroll">
+            <p id="texto-tipeado"></p>
+            <p id="firma-final">De tu amiguito Joel</p>
+        </div>
+    </div>
+
+    <div id="capa-globos">
+        <div id="glob-16" class="balloon-interactivo" onclick="abrirPop('pop-16', this)">16</div>
+        <div id="glob-r" class="balloon-interactivo" onclick="abrirPop('pop-r', this)">🎈</div>
+        <div id="glob-a" class="balloon-interactivo" onclick="abrirPop('pop-a', this)">🎈</div>
+        <div id="glob-p" class="balloon-interactivo" onclick="abrirPop('pop-p', this)">🎈</div>
+    </div>
+
+    <div id="pop-16" class="pop-mensaje"><p>🎉 ¡Feliz 16 cumpleañosssss linda! 🎉</p><button onclick="cerrarPop('pop-16')">Cerrar</button></div>
+    <div id="pop-r" class="pop-mensaje"><p>Muchaaas felicidades por tu dia mi Juliiii. No todos los dias se encuentra a una amiga tan amable como tu, y por eso me alegra mucho tenerte en mi vida <3</p><button onclick="cerrarPop('pop-r')">Cerrar</button></div>
+    <div id="pop-a" class="pop-mensaje"><p>Hice este pequeño regalo para ti, espero te guste, es poquito pero con muuuchooo cariñooooo</p><button onclick="cerrarPop('pop-a')">Cerrar</button></div>
+    <div id="pop-p" class="pop-mensaje"><p>Te quieroooooo muuuuuchooo mi Juliiii <333</p><button onclick="cerrarPop('pop-p')">Cerrar</button></div>
+
+    <script>
+        const audio = document.getElementById('musicaFondo');
+
+        function navegar(idActual, idSiguiente, iniciarAudio = false) {
+            if (iniciarAudio) {
+                audio.play().catch(() => console.log("Audio en espera."));
+            }
+
+            const actual = document.getElementById(idActual);
+            const siguiente = document.getElementById(idSiguiente);
+
+            actual.style.opacity = '0';
+            actual.style.transform = 'translateY(-20px) scale(0.95)';
+            
+            setTimeout(() => {
+                actual.classList.remove('activa');
+                siguiente.classList.add('activa');
+                
+                setTimeout(() => {
+                    siguiente.style.opacity = '1';
+                    siguiente.style.transform = 'translateY(0) scale(1)';
+                    
+                    if (idSiguiente === 'p-carta') {
+                        comenzarEscritura();
+                    }
+                }, 50);
+            }, 600);
+        }
+
+        function comenzarEscritura() {
+            const texto = "Amiga un muuuuy feliz cumpleaños, te quiero desear un feliz dia y unos muuy felices 16 añitos, espero que te la estes pasando muuy bienn, pasandolo con tus seres queridos. Quiero agradecerte por la confianza y por esos momentos en los que una charla contigo nos cambia el animoo, admiro mucho tu forma de ser y esa amabilidad que tienes con todos <3 Te quiero mucho mi Julii, un super abrazooo.";
+            let idx = 0;
+            const elemento = document.getElementById("texto-tipeado");
+
+            function tipear() {
+                if (idx < texto.length) {
+                    elemento.innerHTML += texto.charAt(idx);
+                    idx++;
+                    setTimeout(tipear, 45);
+                } else {
+                    document.getElementById("firma-final").style.opacity = "1";
+                    activarLluviaYGlobos();
+                }
+            }
+            setTimeout(tipear, 600);
+        }
+
+        function activarLluviaYGlobos() {
+            const capa = document.getElementById('capa-globos');
+            capa.style.display = 'block';
+
+            for (let x = 0; x < 30; x++) {
+                setTimeout(crearGloboLluvia, x * 150);
+            }
+
+            configurarMovimiento('glob-16', true);
+            configurarMovimiento('glob-r');
+            configurarMovimiento('glob-a');
+            configurarMovimiento('glob-p');
+        }
+
+        function crearGloboLluvia() {
+            const b = document.createElement('div');
+            b.className = 'balloon-rain';
+            b.style.left = Math.random() * 100 + "vw";
+            b.style.background = `hsl(${Math.random() * 360}, 75%, 85%)`;
+            b.style.animationDuration = (Math.random() * 2 + 3.5) + "s";
+            document.body.appendChild(b);
+            setTimeout(() => b.remove(), 5000);
+        }
+
+        function configurarMovimiento(id, es16 = false) {
+            const el = document.getElementById(id);
+            el.style.display = 'flex';
+            if (es16) el.style.left = 'calc(50% - 45px)';
+            el.style.animation = `floatRandom ${Math.random() * 1.5 + 3}s infinite ease-in-out`;
+        }
+
+        function abrirPop(idPop, elementoGlobo) {
+            elementoGlobo.style.transform = 'scale(2)';
+            elementoGlobo.style.opacity = '0';
+            
+            setTimeout(() => {
+                elementoGlobo.style.display = 'none';
+                document.getElementById(idPop).classList.add('active');
+            }, 250);
+        }
+
+        function cerrarPop(idPop) {
+            document.getElementById(idPop).classList.remove('active');
+        }
+    </script>
+</body>
+</html>
+
